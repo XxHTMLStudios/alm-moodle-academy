@@ -38,7 +38,8 @@ services:
     build: .
     restart: unless-stopped
     depends_on:
-      - moodle
+      mariadb:
+        condition: service_healthy
     environment:
       - MOODLE_DB_HOST=mariadb
       - MOODLE_DB_NAME=${MOODLE_DB_NAME}
@@ -47,10 +48,9 @@ services:
       - MOODLE_WWWROOT=${MOODLE_WWWROOT}
     volumes:
       - moodledata:/var/moodledata
-      - moodle_config:/var/www/html/config.php
-    command: /bin/bash -c "while true; do php /var/www/html/admin/cli/cron.php; sleep 60; done"
+    entrypoint: /bin/bash
+    command: -c "source /entrypoint.sh || true; while true; do php /var/www/html/admin/cli/cron.php; sleep 60; done"
 
 volumes:
   mariadb_data:
   moodledata:
-  moodle_config:
