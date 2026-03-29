@@ -28,6 +28,10 @@ RUN echo "display_errors = Off" >> /usr/local/etc/php/conf.d/moodle.ini
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
+# Set Apache document root to /public for Moodle 5.0+
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
+
 # Download Moodle (change MOODLE_405_STABLE to your desired version)
 RUN git clone --depth=1 -b MOODLE_501_STABLE git://git.moodle.org/moodle.git /var/www/html \
     && chown -R www-data:www-data /var/www/html \
