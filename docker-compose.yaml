@@ -28,8 +28,3 @@ services:
 
 volumes:
   moodledata:
-
-networks:
-  default:
-    name: dqugrtlz6te9fp3f5qkwoqer
-    external: true
