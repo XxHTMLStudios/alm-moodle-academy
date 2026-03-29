@@ -29,7 +29,7 @@ RUN echo "display_errors = Off" >> /usr/local/etc/php/conf.d/moodle.ini
 RUN a2enmod rewrite
 
 # Download Moodle (change MOODLE_405_STABLE to your desired version)
-RUN git clone --depth=1 -b MOODLE_405_STABLE git://git.moodle.org/moodle.git /var/www/html \
+RUN git clone --depth=1 -b MOODLE_501_STABLE git://git.moodle.org/moodle.git /var/www/html \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
