@@ -23,6 +23,7 @@ RUN echo "max_input_vars = 5000" >> /usr/local/etc/php/conf.d/moodle.ini \
     && echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/moodle.ini \
     && echo "opcache.enable = 1" >> /usr/local/etc/php/conf.d/moodle.ini \
     && echo "opcache.memory_consumption = 128" >> /usr/local/etc/php/conf.d/moodle.ini
+RUN echo "display_errors = Off" >> /usr/local/etc/php/conf.d/moodle.ini
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite

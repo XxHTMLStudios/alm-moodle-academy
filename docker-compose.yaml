@@ -33,6 +33,22 @@ services:
     volumes:
       - moodledata:/var/moodledata
 
+  moodle-cron:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - moodle
+    environment:
+      - MOODLE_DB_HOST=mariadb
+      - MOODLE_DB_NAME=${MOODLE_DB_NAME}
+      - MOODLE_DB_USER=${MOODLE_DB_USER}
+      - MOODLE_DB_PASSWORD=${MOODLE_DB_PASSWORD}
+      - MOODLE_WWWROOT=${MOODLE_WWWROOT}
+    volumes:
+      - moodledata:/var/moodledata
+    entrypoint: /bin/bash
+    command: -c "while true; do php /var/www/html/admin/cli/cron.php; sleep 60; done"
+
 volumes:
   mariadb_data:
   moodledata:
