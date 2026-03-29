@@ -1,0 +1,37 @@
+services:
+  mariadb:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MOODLE_DB_NAME}
+      - MYSQL_USER=${MOODLE_DB_USER}
+      - MYSQL_PASSWORD=${MOODLE_DB_PASSWORD}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  moodle:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      - SERVICE_FQDN_MOODLE_80
+      - MOODLE_DB_HOST=mariadb
+      - MOODLE_DB_NAME=${MOODLE_DB_NAME}
+      - MOODLE_DB_USER=${MOODLE_DB_USER}
+      - MOODLE_DB_PASSWORD=${MOODLE_DB_PASSWORD}
+      - MOODLE_WWWROOT=${MOODLE_WWWROOT}
+    volumes:
+      - moodledata:/var/moodledata
+
+volumes:
+  mariadb_data:
+  moodledata:
