@@ -24,7 +24,6 @@ if [ ! -f "$CONFIG_FILE" ]; then
         echo "\$CFG->admin     = 'admin';"
         echo ""
         echo "\$CFG->sslproxy  = true;"
-        echo "\$CFG->reverseproxy = true;"
         echo ""
         echo "\$CFG->directorypermissions = 0777;"
         echo ""
