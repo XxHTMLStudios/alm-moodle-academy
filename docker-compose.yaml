@@ -9,7 +9,7 @@ services:
       - MYSQL_USER=${MOODLE_DB_USER}
       - MYSQL_PASSWORD=${MOODLE_DB_PASSWORD}
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - mariadb-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 20s
@@ -32,7 +32,6 @@ services:
       - MOODLE_WWWROOT=${MOODLE_WWWROOT}
     volumes:
       - moodledata:/var/moodledata
-      - moodle_config:/var/www/html/config.php
 
   moodle-cron:
     build: .
@@ -49,8 +48,8 @@ services:
     volumes:
       - moodledata:/var/moodledata
     entrypoint: /bin/bash
-    command: -c "source /entrypoint.sh || true; while true; do php /var/www/html/admin/cli/cron.php; sleep 60; done"
+    command: -c "/entrypoint.sh true; while true; do php /var/www/html/admin/cli/cron.php; sleep 60; done"
 
 volumes:
-  mariadb_data:
+  mariadb-data:
   moodledata:
