@@ -10,8 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install required PHP extensions for Moodle
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        mysqli pdo pdo_mysql zip gd intl soap exif \
-        xmlrpc opcache xsl ldap
+        mysqli pdo pdo_mysql zip gd intl soap exif xsl ldap
+
+# Enable opcache separately
+RUN docker-php-ext-enable opcache
 
 # Set recommended PHP settings for Moodle
 RUN echo "max_input_vars = 5000" >> /usr/local/etc/php/conf.d/moodle.ini \
@@ -26,7 +28,7 @@ RUN echo "max_input_vars = 5000" >> /usr/local/etc/php/conf.d/moodle.ini \
 RUN a2enmod rewrite
 
 # Download Moodle (change MOODLE_405_STABLE to your desired version)
-RUN git clone --depth=1 -b MOODLE_501_STABLE git://git.moodle.org/moodle.git /var/www/html \
+RUN git clone --depth=1 -b MOODLE_405_STABLE git://git.moodle.org/moodle.git /var/www/html \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
@@ -35,7 +37,7 @@ RUN mkdir -p /var/moodledata \
     && chown -R www-data:www-data /var/moodledata \
     && chmod -R 777 /var/moodledata
 
-# Copy our config.php into the image entrypoint area
+# Copy entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
